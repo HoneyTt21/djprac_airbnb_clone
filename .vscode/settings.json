@@ -1,6 +1,7 @@
 {
-    "python.pythonPath": "C:\\Users\\HoneyTt\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
+    "python.pythonPath": "/home/honeytt/.local/share/virtualenvs/airbnb-clone-BaLce3-U/bin/python",
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.linting.flake8Args":["--max-line-length=88"]
 }
