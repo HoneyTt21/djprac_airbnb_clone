@@ -76,6 +76,12 @@ class Room(core_models.AbstractTimeStamp):
     facilities = models.ManyToManyField(Facility, related_name="rooms", blank=True)
     house_rules = models.ManyToManyField(HouseRule, related_name="rooms", blank=True)
 
+    def save(self, *args, **kwargs):
+        self.city = str.capitalize(self.city)
+        self.name = str.capitalize(self.name)
+        self.address = str.capitalize(self.address)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -84,7 +90,8 @@ class Room(core_models.AbstractTimeStamp):
         all_ratings = 0
         for review in all_reviews:
             all_ratings += review.rating_average()
-        all_ratings = all_ratings / len(all_reviews)
+        if len(all_reviews) != 0:
+            all_ratings = all_ratings / len(all_reviews)
         return all_ratings
 
 
