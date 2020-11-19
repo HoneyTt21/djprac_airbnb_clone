@@ -8,9 +8,26 @@
     Hello!
 </h1>
 
-{%for room in rooms %}
+{%for room in rooms.object_list %}
 <h4>
     {{room.name}} / ${{room.price}}
 </h4>
 {%endfor%}
+
+{%if rooms.has_previous%}
+<a href="?page={{page|add:-1}}">Previous</a>
+{%endif%}
+
+{%for i in rooms.paginator.page_range%}
+{%if i == rooms.number%}
+    <a href="?page={{i}}" style="background-color: gray">{{i}}</a>
+{%else%}
+    <a href="?page={{i}}">{{i}}</a>
+{%endif%}
+{%endfor%}
+
+{%if rooms.has_next%}
+<a href="?page={{page|add:1}}">Next</a>
+{%endif%}
+
 {%endblock%}

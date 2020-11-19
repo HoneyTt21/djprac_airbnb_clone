@@ -62,6 +62,7 @@ class RoomAdmin(admin.ModelAdmin):
 
     list_display = (
         "name",
+        "created",
         "country",
         "city",
         "price",
@@ -78,7 +79,7 @@ class RoomAdmin(admin.ModelAdmin):
         "total_rating",
     )
 
-    ordering = ("name", "price", "bedrooms")
+    ordering = ("created", "name", "price", "bedrooms")
 
     list_filter = (
         "instant_book",

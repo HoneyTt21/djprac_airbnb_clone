@@ -1,0 +1,7 @@
+a {
+    text-color: blue;
+}
+
+a .selected {
+    font-size: 1.5ch;
+}
