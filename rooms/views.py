@@ -1,38 +1,18 @@
-import math
-from django.shortcuts import render
-from django.core.paginator import Paginator
+from django.utils import timezone
+from django.views.generic import ListView
 from . import models
 
 
-def all_rooms(request):
-    # page = request.GET.get("page", 1)
-    # page = int(page or 1)
-    # page_size = 10
-    # limit = page_size * page
-    # offset = page_size * (page - 1)
-    # all_rooms = models.Room.objects.all()[offset:limit]
-    # page_count = math.ceil(models.Room.objects.count() / page_size)
-    # page_list = []
-    # for i in range(page_count):
-    #     page_list.append(int(i + 1))
-    # return render(
-    #     request,
-    #     "rooms/home.html",
-    #     context={
-    #         "rooms": all_rooms,
-    #         "page": page,
-    #         "page_list": page_list,
-    #         "page_count": page_count,
-    #     },
-    # )
-    page = request.GET.get("page")
-    room_list = models.Room.objects.all()
-    paginator = Paginator(room_list, 10, orphans=2)
-    rooms = paginator.get_page(page)
-    return render(
-        request,
-        "rooms/home.html",
-        context={
-            "rooms": rooms,
-        },
-    )
+class HomeView(ListView):
+    """Home View"""
+
+    model = models.Room
+    paginate_by = 10
+    paginate_orphan = 2
+    ordering = "created"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        now = timezone.now
+        context["now"] = now
+        return context
