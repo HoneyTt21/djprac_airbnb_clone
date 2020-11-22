@@ -1,20 +1,25 @@
 import random
+from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
+from django.contrib.admin.utils import flatten
 from django_seed import Seed
-from reviews import models as review_models
 from users import models as user_models
+from reservations import models as reservation_models
 from rooms import models as room_models
 
 
+NAME = "reservationss"
+
+
 class Command(BaseCommand):
-    help = "This command seeds reviews"
+    help = f"This command seeds {NAME}"
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--number",
             default=1,
             type=int,
-            help="How many reviews do you want to create?",
+            help=f"How many {NAME} do you want to create?",
         )
 
     def handle(self, *args, **options):
@@ -23,18 +28,16 @@ class Command(BaseCommand):
         users = user_models.User.objects.all()
         rooms = room_models.Room.objects.all()
         seeder.add_entity(
-            review_models.Review,
+            reservation_models.Reservation,
             number_args,
             {
-                "accuracy": lambda x: random.randint(0, 5),
-                "communication": lambda x: random.randint(0, 5),
-                "cleanliness": lambda x: random.randint(0, 5),
-                "location": lambda x: random.randint(0, 5),
-                "check_in": lambda x: random.randint(0, 5),
-                "value": lambda x: random.randint(0, 5),
+                "status": lambda x: random.choice(["pending", "confirmed", "canceled"]),
+                "guest": lambda x: random.choice(users),
                 "room": lambda x: random.choice(rooms),
-                "user": lambda x: random.choice(users),
+                "check_in": lambda x: datetime.now(),
+                "check_out": lambda x: datetime.now()
+                + timedelta(days=random.randint(3, 10)),
             },
         )
         seeder.execute()
-        self.stdout.write(self.style.SUCCESS(f"{number_args} Reviews Made!"))
+        self.stdout.write(self.style.SUCCESS(f"{number_args} {NAME} Made!"))

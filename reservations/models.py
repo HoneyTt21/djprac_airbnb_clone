@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 from django.utils import timezone
 from core import models as core_models
@@ -31,10 +32,11 @@ class Reservation(core_models.AbstractTimeStamp):
 
     def in_progress(self):
         now = timezone.now().date()
-        return now >= self.check_in and now <= self.check_out
+        return now >= self.check_in - timedelta(days=1) and now <= self.check_out
 
     def is_finished(self):
         now = timezone.now().date()
-        return now > self.now
+        return now > self.check_out
 
     in_progress.boolean = True
+    is_finished.boolean = True
