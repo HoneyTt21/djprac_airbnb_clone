@@ -139,3 +139,5 @@ cython_debug/
 
 # Media uploads
 uploads/
+
+node_modules
